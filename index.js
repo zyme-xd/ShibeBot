@@ -1,5 +1,6 @@
 const Twit = require('twit')
 require('dotenv').config()
+const axios = require("axios");
 
 var T = new Twit({ // grab api keys from a .env 
   consumer_key: process.env.CONSUMER_KEY,
@@ -10,6 +11,8 @@ var T = new Twit({ // grab api keys from a .env
 })
 
 
-T.post('statuses/update', { status: 'hello world! this is shibe bots first "tweet"' }, function(err, data, response) {
+T.post('statuses/update', {
+  status: 'hello world! this is shibe bots first "tweet"'
+}, function (err, data, response) {
   console.log(err)
 })
