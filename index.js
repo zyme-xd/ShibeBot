@@ -6,5 +6,6 @@ var T = new Twit({
   consumer_secret:      ,
   access_token:         ,
   access_token_secret:  ,
-  strictSSL:            true,     // optional - requires SSL certificates to be valid.
+  strictSSL:            true,     // i want to do some more verification stuff i guess
 })
+
