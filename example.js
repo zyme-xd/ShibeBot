@@ -9,8 +9,8 @@ const readline = require('readline').createInterface({
 
 readline.question('how many dogs do u want? (max is 100)', amount => {
     console.log("ok, getting " + amount,)
-    axios.get(`http://shibe.online/api/shibes?count=${amount}&urls=true&httpsUrls=true`).then(resp => {
-        for (i = 0; i < amount; i++) {
+    axios.get(`http://shibe.online/api/shibes?count=${amount}&urls=true&httpsUrls=true`).then(resp => { // do get request
+        for (i = 0; i < amount; i++) { // goes through all the of the images in response data depending with amount var
             console.log(resp.data[i]);
         }
         readline.close();
