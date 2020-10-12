@@ -7,6 +7,8 @@ const {
 const fs = require("fs")
 // code above gets modules
 const folder = "./folder"
+const path = require("path")
+
 var T = new Twit({ // grab api keys from a .env file for security
   consumer_key: process.env.CONSUMER_KEY,
   consumer_secret: process.env.CONSUMER_SECRET,
@@ -53,7 +55,7 @@ function SeeContents() {
         T.post('media/metadata/create', meta_params, function (err, data, response) {
           if (!err) {
             var params = {
-              status: 'Hourly Dog',
+              status: 'here is a cute dog!',
               media_ids: [mediaIdStr]
             }
 
@@ -64,9 +66,19 @@ function SeeContents() {
         });
       })
     }
+
+    fs.readdir(folder, (err, files) => {
+      if (err) throw err;
+
+      for (const file of files) {
+        fs.unlink(path.join(folder, file), err => {
+          if (err) throw err;
+        });
+      }
+    });
   })
 }
 
+SeeContents()
 
-
-setInterval(SeeContents, 1000)
+setInterval(SeeContents, 1500000)
