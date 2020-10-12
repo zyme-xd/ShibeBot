@@ -15,5 +15,5 @@ var T = new Twit({ // grab api keys from a .env file for security
 T.post('statuses/update', {
   status: 'hello world! this is shibe bots first "tweet"'
 }, function (err, data, response) {
-  console.log(err)
+  console.log(data)
 })
