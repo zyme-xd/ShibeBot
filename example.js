@@ -1,5 +1,5 @@
 // this is example code for interacting with shibe.online's api. i will use this to help me create this bot without it being garbage! thank you :)
-const axios = require('axios');
+const fetch = require('node-fetch')
 const readline = require('readline-promise').default.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -8,22 +8,30 @@ const fs = require('fs')
 ShibeTime()
 
 async function ShibeTime() {
-    let amount = await readline.questionAsync('how many dogs do u want? (max is 100)')
+    let amount = parseInt(await readline.questionAsync('how many dogs do u want? (max is 100)  '))
+    if (isNaN(amount)){
+        console.log("You can't input a string")
+        ShibeTime()
+        return
+    }
+    if (amount <= 0){
+        console.log('Cannot generate anti-matter dogs. (Why did you expect this to work? You fucking dumbass)')
+        ShibeTime()
+        return
+    }
     if (amount > 100) {
         console.log("You've requested too many dogs.") // if over 100 doesnt even touch the api
         ShibeTime()
         return
     }
     console.log("ok, getting " + amount, )
-    let resp = await axios.get(`http://shibe.online/api/shibes?count=${amount}&urls=true&httpsUrls=true`) // do a request
-    let downloads = []
-    for (i = 0; i < amount; i++) { // go through every thing in the array and print it til done
-        let promise = axios.get(resp.data[i], { responseType: "stream" })
-        promise = promise.then(function (resp2){
-            resp2.data.pipe(fs.createWriteStream('./folder/' + resp2.config.url.split('/').pop())) 
-        })  
-        downloads.push(promise)
-    }
+    let resp = await fetch(`http://shibe.online/api/shibes?count=${amount}&urls=false&httpsUrls=true`) // do a request
+    let FileNames = await resp.json()
+    let downloads = FileNames.map(async function(FileName){
+        let response2 = await fetch('https://cdn.shibe.online/shibes/' + FileName + '.jpg')
+        let writestream = fs.createWriteStream('./folder/' + FileName + '.jpg')
+        response2.body.pipe(writestream)
+    })
     await Promise.all(downloads)
     PromptAgain()
 }
